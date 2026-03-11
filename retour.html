@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Retour PC</title>
+<link rel="stylesheet" href="stayle.css">
+</head>
+
+<body>
+
+<img src="cropped-osbt.png" width="100">
+
+<form id="retour">
+
+<label>ID du prêt</label>
+<input type="number" id="loanid" required>
+
+<label>Etat du retour</label>
+<input type="text" id="state" placeholder="bon / cassé">
+
+<label>Note</label>
+<input type="text" id="note">
+
+<input type="submit" value="confirmer retour">
+
+</form>
+
+<div id="message"></div>
+
+<script>
+
+document.getElementById("retour").addEventListener("submit", function(e){
+
+e.preventDefault();
+
+let id = document.getElementById("loanid").value;
+let state = document.getElementById("state").value;
+let note = document.getElementById("note").value;
+
+fetch(`http://localhost:3000/loans/${id}/return`,{
+
+method:"PUT",
+
+headers:{
+"Content-Type":"application/json"
+},
+
+body:JSON.stringify({
+return_state:state,
+return_note:note
+})
+
+})
+
+.then(res => res.text())
+
+.then(data => {
+document.getElementById("message").innerText = data;
+})
+
+.catch(err => {
+document.getElementById("message").innerText = "Erreur lors du retour";
+})
+
+});
+
+</script>
+
+</body>
+</html>
